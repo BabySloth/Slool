@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1210.0" style="-fx-background-color: #323232;" stylesheets="@../DesignsCSS/calendarDesign.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SloolDirect.CalendarController">
+   <children>
+      <VBox prefHeight="770.0" prefWidth="910.0">
+         <children>
+            <HBox fx:id="monthHolder" prefHeight="30.0" prefWidth="910.0">
+               <children>
+                  <Button id="buttonTop" mnemonicParsing="false" onAction="#changeYearMinus" prefHeight="30.0" prefWidth="30.0" text="&lt;" textFill="#f0edee" />
+                  <Text fx:id="yearDisplay" fill="#efe821" strokeType="OUTSIDE" strokeWidth="0.0" text="2017" textAlignment="CENTER" wrappingWidth="50.0">
+                     <font>
+                        <Font name="Arial" size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="3.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Button id="buttonTop" mnemonicParsing="false" onAction="#changeYearPlus" prefHeight="30.0" prefWidth="30.0" text="&gt;" textFill="#f0edee" />
+                  <Button id="buttonTop" fx:id="monthDecrease" mnemonicParsing="false" onAction="#changeMonthMinus" prefHeight="30.0" prefWidth="40.0" text="&lt;" textFill="#f0edee" />
+                  <Button id="buttonTop" fx:id="monthIncrease" mnemonicParsing="false" onAction="#changeMonthPlus" prefHeight="30.0" prefWidth="40.0" text="&gt;" textFill="#f0edee" />
+               </children>
+            </HBox>
+            <GridPane fx:id="daysHolder" prefHeight="570.0" prefWidth="910.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="90.0" minHeight="90.0" prefHeight="90.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <VBox.margin>
+                  <Insets top="2.0" />
+               </VBox.margin>
+               <children>
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Sunday" />
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Monday" GridPane.columnIndex="1" />
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Wednesday" GridPane.columnIndex="3" />
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Thursday" GridPane.columnIndex="4" />
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Friday" GridPane.columnIndex="5" />
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Saturday" GridPane.columnIndex="6" />
+                  <Text fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="Tuesday" GridPane.columnIndex="2" />
+               </children>
+            </GridPane>
+            <TextFlow prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Text fx:id="bottomDayOfWeek" fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text="Wednesday" wrappingWidth="266.1244354248047">
+                     <font>
+                        <Font size="96.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="bottomDay" fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text=" 25">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="bottomSuffix" fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text="th" />
+                  <Text fx:id="bottomYear" fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text=" 2017">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Text>
+               </children>
+            </TextFlow>
+         </children>
+         <HBox.margin>
+            <Insets left="5.0" />
+         </HBox.margin>
+      </VBox>
+      <VBox prefHeight="770.0" prefWidth="295.0">
+         <children>
+            <Text fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Events:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="9.0" top="7.0" />
+               </VBox.margin>
+            </Text>
+            <TextField fx:id="dateChosed" editable="false" onMouseClicked="#changeDate" promptText="Date">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor></TextField>
+            <RadioButton fx:id="toggleButtonSchool" mnemonicParsing="false" selected="true" text="School" textFill="#1495e0">
+               <VBox.margin>
+                  <Insets left="3.0" top="2.0" />
+               </VBox.margin></RadioButton>
+            <RadioButton fx:id="toggleButtonEntertainment" mnemonicParsing="false" text="Entertainment" textFill="#53dd6c">
+               <VBox.margin>
+                  <Insets left="3.0" top="2.0" />
+               </VBox.margin></RadioButton>
+            <RadioButton fx:id="toggleButtonPersonal" mnemonicParsing="false" text="Personal" textFill="#ff3e41">
+               <VBox.margin>
+                  <Insets left="3.0" top="2.0" />
+               </VBox.margin></RadioButton>
+            <TextField fx:id="inputEvent" maxHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#newEvent" prefHeight="30.0" promptText="Add event">
+               <VBox.margin>
+                  <Insets top="3.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <Text fx:id="showingEventText" fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Details:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="9.0" top="10.0" />
+               </VBox.margin>
+            </Text>
+            <HBox prefHeight="30.0" prefWidth="200.0">
+               <children>
+                  <Button id="removeButton" mnemonicParsing="false" onAction="#removeEvent" text="Remove" />
+                  <TextField fx:id="removeThis" prefHeight="27.0" prefWidth="223.0" />
+               </children>
+            </HBox>
+            <VBox fx:id="eventDisplayHolder" prefHeight="501.0" prefWidth="295.0">
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>

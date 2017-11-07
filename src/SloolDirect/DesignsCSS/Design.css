@@ -1,0 +1,88 @@
+#mainHolder{
+    -fx-background-color: #323232;
+}
+#toolbarButtonClose{
+    -fx-background-color: #B84E4B;
+}
+#toolbarButtonClose:hover{
+    -fx-background-color: #FB615B;
+}
+#toolbarButtonMinimize{
+    -fx-background-color: #BA8E38;
+}
+#toolbarButtonMinimize:hover{
+    -fx-background-color: #FDBD41;
+}
+#toolbarButtonFullScreen{
+    -fx-background-color: #2D953E;
+}
+#toolbarButtonFullScreen:hover{
+    -fx-background-color: #33C749;
+}
+#toolbarButton:hover {
+    -fx-background-color: #eaeaea;
+    -fx-text-fill: #323232;
+}
+#topTime{
+    -fx-background-color: transparent;
+    -fx-text-fill: #eaeaea;
+}
+#mainChange{
+     -fx-background-image: url("file:/Users/BabySloth/SloolData/Resources/mainDesign.png");
+     -fx-background-size: 56 56;
+     -fx-background-insets: 0px;
+     -fx-background-color: transparent;
+     -fx-padding: 0px;
+}
+#mainChange:selected{
+    -fx-background-color: #F0EDEE;
+}
+#dashChange{
+    -fx-background-image: url("file:/Users/BabySloth/SloolData/Resources/dashDesign.png");
+    -fx-background-size: 56 56;
+    -fx-background-insets: 0px;
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+}
+#dashChange:selected{
+    -fx-background-color: #1495E0;
+}
+#calendarChange{
+    -fx-background-image: url("file:/Users/BabySloth/SloolData/Resources/calendarDesign.png");
+    -fx-background-size: 56 56;
+    -fx-background-insets: 0px;
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+}
+#calendarChange:selected{
+    -fx-background-color: #F75C03;
+}
+#funChange{
+    -fx-background-image: url("file:/Users/BabySloth/SloolData/Resources/funDesign.png");
+    -fx-background-size: 56 56;
+    -fx-background-insets: 0px;
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+}
+#funChange:selected{
+    -fx-background-color: #D854D4;
+}
+#schoolChange{
+    -fx-background-image: url("file:/Users/BabySloth/SloolData/Resources/schoolDesign.png");
+    -fx-background-size: 56 56;
+    -fx-background-insets: 0px;
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+}
+#schoolChange:selected{
+    -fx-background-color: #EFE821;
+}
+#mainChange:hover, #dashChange:hover, #calendarChange:hover, #funChange:hover, #schoolChange:hover{
+    -fx-background-color: #656565;
+}
+#separator *.line {
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #606060;
+    -fx-background-color: #606060;
+}

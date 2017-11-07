@@ -1,0 +1,41 @@
+.monthToggle{
+    -fx-background-color: transparent;
+}
+.monthToggle:selected{
+    -fx-background-color: #656565;
+}
+.monthToggle:hover{
+    -fx-background-color: #656565;
+}
+#dateChosed{
+    -fx-background-color: transparent;
+    -fx-text-fill: #34aac1;
+    -fx-prompt-text-fill: #30C5FF;
+}
+#inputEvent{
+    -fx-background-color: transparent;
+    -fx-text-fill: #34aac1;
+    -fx-prompt-text-fill: #30C5FF;
+}
+#buttonTop{
+    -fx-text-fill: #c0c0c0;
+    -fx-background-color: transparent;
+}
+#buttonTop:hover{
+    -fx-background-color: #656565;
+}
+.radio-button .radio{
+    -fx-border-width: 1px;
+    -fx-background-color: transparent;
+}
+#removeButton{
+    -fx-text-fill: #C5283D;
+    -fx-background-color: transparent;
+}
+#removeButton:hover{
+    -fx-background-color: #656565;
+}
+#removeThis{
+    -fx-background-color: transparent;
+    -fx-text-fill: c0c0c0;
+}

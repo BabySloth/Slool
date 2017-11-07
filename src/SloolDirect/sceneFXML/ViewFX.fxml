@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox id="mainHolder" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../DesignsCSS/Design.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SloolDirect.HeadController">
+   <children>
+      <HBox prefHeight="30.0" prefWidth="1280.0">
+         <children>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: #262424;">
+               <children>
+                  <Button id="toolbarButtonClose" fx:id="closeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#actionClose" prefHeight="14.0" prefWidth="14.0">
+                     <HBox.margin>
+                        <Insets left="7.0" top="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="toolbarButtonMinimize" fx:id="minimizeButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#actionMinimize" prefHeight="14.0" prefWidth="14.0" text="-">
+                     <HBox.margin>
+                        <Insets left="7.0" top="8.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button id="toolbarButtonFullScreen" fx:id="fullscreenButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#actionFullscreen" prefHeight="14.0" prefWidth="14.0" text="+">
+                     <HBox.margin>
+                        <Insets left="7.0" top="8.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+            <TextField id="topTime" fx:id="topTime" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="1210.0" text="Time">
+               <font>
+                  <Font name="Arial" size="16.0" />
+               </font>
+            </TextField>
+         </children>
+      </HBox>
+      <HBox fx:id="holder" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1280.0">
+         <children>
+            <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="70.0" style="-fx-background-color: #262424;">
+               <children>
+                  <ToggleButton fx:id="mainChange" mnemonicParsing="false" onAction="#actionMainChange" prefHeight="56.0" prefWidth="56.0" />
+                  <Separator id="separator" maxWidth="-Infinity" prefWidth="30.0">
+                     <VBox.margin>
+                        <Insets top="6.0" />
+                     </VBox.margin>
+                  </Separator>
+                  <ToggleButton fx:id="dashChange" mnemonicParsing="false" onAction="#actionDashChange" prefHeight="56.0" prefWidth="56.0">
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </ToggleButton>
+                  <ToggleButton fx:id="calendarChange" mnemonicParsing="false" onAction="#actionCalendarChange" prefHeight="56.0" prefWidth="56.0">
+                     <VBox.margin>
+                        <Insets top="7.0" />
+                     </VBox.margin>
+                  </ToggleButton>
+                  <ToggleButton fx:id="schoolChange" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0">
+                     <VBox.margin>
+                        <Insets top="7.0" />
+                     </VBox.margin>
+                  </ToggleButton>
+                  <ToggleButton fx:id="funChange" mnemonicParsing="false" prefHeight="56.0" prefWidth="56.0">
+                     <VBox.margin>
+                        <Insets top="7.0" />
+                     </VBox.margin>
+                  </ToggleButton>
+               </children>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </VBox>
+            <VBox fx:id="mainHolder" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1210.0">
+               <children>
+                  <Text fill="#1317fc" strokeType="OUTSIDE" strokeWidth="0.0" text="main" />
+               </children></VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
