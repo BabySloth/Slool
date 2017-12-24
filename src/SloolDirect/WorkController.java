@@ -104,5 +104,5 @@ public final class WorkController implements Initializable {
                 stopwatchTime[1], stopwatchTime[2]));
     }
 
-    //TODO: ASDf
+    //TODO: Add toDo and write data to disk
 }
