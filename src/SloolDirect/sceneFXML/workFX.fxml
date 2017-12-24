@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1210.0" style="-fx-background-color: #262626;" stylesheets="@../DesignsCSS/workDesign.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SloolDirect.WorkController">
+   <children>
+      <HBox prefHeight="30.0" prefWidth="1210.0" spacing="5.0">
+         <children>
+            <Label prefHeight="30.0" text="Stopwatch |" textFill="WHITE">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="displayStopWatch" prefHeight="30.0" text="Label" textFill="WHITE" />
+            <Button id="stopwatchButton" mnemonicParsing="false" onAction="#actionStopwatch" prefHeight="30.0" text="Start" textFill="#53dd6c" />
+            <Button id="stopwatchButton" mnemonicParsing="false" onAction="#actionStopwatchReset" prefHeight="30.0" text="Reset" textFill="#d1cecf" />
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

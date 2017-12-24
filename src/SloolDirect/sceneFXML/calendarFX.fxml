@@ -8,7 +8,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1210.0" style="-fx-background-color: #323232;" stylesheets="@../DesignsCSS/calendarDesign.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SloolDirect.CalendarController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="1210.0" style="-fx-background-color: #262626;" stylesheets="@../DesignsCSS/calendarDesign.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SloolDirect.CalendarController">
    <children>
       <VBox prefHeight="770.0" prefWidth="910.0">
          <children>
@@ -105,7 +105,7 @@
                <cursor>
                   <Cursor fx:constant="DEFAULT" />
                </cursor></TextField>
-            <RadioButton fx:id="toggleButtonSchool" mnemonicParsing="false" selected="true" text="School" textFill="#1495e0">
+            <RadioButton fx:id="toggleButtonSchool" mnemonicParsing="false" selected="true" text="Work" textFill="#1495e0">
                <VBox.margin>
                   <Insets left="3.0" top="2.0" />
                </VBox.margin></RadioButton>
@@ -125,6 +125,23 @@
                   <Font size="15.0" />
                </font>
             </TextField>
+            <HBox prefHeight="22.0" prefWidth="295.0">
+               <children>
+                  <Text fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text="Days:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="daysApart" fill="#f0edee" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                     <HBox.margin>
+                        <Insets left="9.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
             <Text fx:id="showingEventText" fill="#f75c03" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Details:">
                <font>
                   <Font size="18.0" />
@@ -133,13 +150,7 @@
                   <Insets left="9.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <HBox prefHeight="30.0" prefWidth="200.0">
-               <children>
-                  <Button id="removeButton" mnemonicParsing="false" onAction="#removeEvent" text="Remove" />
-                  <TextField fx:id="removeThis" prefHeight="27.0" prefWidth="223.0" />
-               </children>
-            </HBox>
-            <VBox fx:id="eventDisplayHolder" prefHeight="501.0" prefWidth="295.0">
+            <VBox fx:id="eventDisplayHolder" prefHeight="563.0" prefWidth="295.0">
                <padding>
                   <Insets top="5.0" />
                </padding>

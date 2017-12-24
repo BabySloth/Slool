@@ -23,14 +23,7 @@ public class Main extends Application {
         primaryStage.setTitle("SLool");
         primaryStage.setScene(new Scene(root, 1280, 800));
         primaryStage.setFullScreen(true);
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
-            @Override
-            public void handle(WindowEvent event){
-                event.consume();
-                Platform.exit();
-                System.exit(0);
-            }
-        });
+        primaryStage.setOnCloseRequest((event) -> event.consume());
         primaryStage.show();
 
     }

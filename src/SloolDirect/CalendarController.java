@@ -1,117 +1,167 @@
 package SloolDirect;
 
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
-import java.lang.reflect.Array;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-public class CalendarController implements Initializable{
-    final private String[] monthList= {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+public final class CalendarController implements Initializable {
+    private static final String[] MONTHS =
+            {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     private ToggleGroup addEventToggleGroup = new ToggleGroup();
     private ToggleGroup monthToggleGroup = new ToggleGroup();
 
     private ArrayList<ToggleButton> arrayMonthToggle = new ArrayList<>(12);
-    private ArrayList<customVBox> calendarVBox = new ArrayList<>(42);
-    private ArrayList<textExtends> arrayTextExtends = new ArrayList<>();
+    private ArrayList<dateBox> calendarVBox = new ArrayList<>(42);
 
     private YearMonth yearMonthNow = YearMonth.now();
     private LocalDate localDateNow = LocalDate.now();
     private YearMonth yearMonthToday = YearMonth.now();
     private LocalDate localDateEventShow, localDateEventShow2;
 
-    private String[] remove = new String[3];
-
     volatile HashMap<String, String> eventLong = new HashMap<>();
     volatile HashMap<String, String> eventShort = new HashMap<>();
 
-    @FXML ToggleButton toggleButtonSchool, toggleButtonEntertainment, toggleButtonPersonal;
-    @FXML Button monthIncrease;
-    @FXML TextField dateChosed, removeThis, inputEvent;
-    @FXML HBox monthHolder;
-    @FXML VBox eventDisplayHolder;
-    @FXML Text yearDisplay, bottomDayOfWeek, bottomDay, bottomSuffix, bottomYear, showingEventText;
-    @FXML GridPane daysHolder;
+    volatile boolean writeData = false;
+
+    @FXML
+    ToggleButton toggleButtonSchool, toggleButtonEntertainment, toggleButtonPersonal;
+    @FXML
+    Button monthIncrease;
+    @FXML
+    TextField dateChosed, inputEvent;
+    @FXML
+    HBox monthHolder;
+    @FXML
+    VBox eventDisplayHolder;
+    @FXML
+    Text yearDisplay, bottomDayOfWeek, bottomDay, bottomSuffix, bottomYear, showingEventText, daysApart;
+    @FXML
+    GridPane daysHolder;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        eventShort.put("289,2017","S School starts,Egg throwing");
-        SetUp setUpMethod = new SetUp();
-        setUpMethod.startUp();
+        try {
+            readData();
+        } catch (Exception e) {
+        }
+        new SetUp().startUp();
         updateView();
     }
-    @FXML void changeMonthPlus(){
+
+    private void readData() throws Exception {
+        File file = new File("/Users/BabySloth/SloolData/Data2.xml");
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(file);
+        document.normalizeDocument();
+        NodeList nodeList = document.getElementsByTagName("Year");
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            Element element = (Element) node;
+            updateEventHash(element.getTextContent());
+        }
+    }
+
+    private void updateEventHash(String events) {
+        String[] dictionaryDays = events.split("\\|\\|");
+        for (int i = 0; i < dictionaryDays.length; i++) {
+            String[] daysEvent = dictionaryDays[i].split("\\|");
+            if (daysEvent[0].split(",").length == 4) {
+                eventLong.put(daysEvent[0], daysEvent[1]);
+            } else {
+                eventShort.put(daysEvent[0], daysEvent[1]);
+            }
+        }
+    }
+
+    @FXML
+    void changeMonthPlus() {
         yearMonthNow = yearMonthNow.plusMonths(1);
         updateView();
     }
-    @FXML void changeMonthMinus(){
+
+    @FXML
+    void changeMonthMinus() {
         yearMonthNow = yearMonthNow.minusMonths(1);
         updateView();
     }
-    @FXML void changeYearPlus(){
+
+    @FXML
+    void changeYearPlus() {
         yearMonthNow = yearMonthNow.plusYears(1);
         updateView();
     }
-    @FXML void changeYearMinus(){
+
+    @FXML
+    void changeYearMinus() {
         yearMonthNow = yearMonthNow.minusYears(1);
         updateView();
     }
 
-    private void updateView(){
+    private void updateView() {
         LocalDate showingDate = LocalDate.of(yearMonthNow.getYear(), yearMonthNow.getMonth(), 1);
         populateCalendar(showingDate);
         updateToggleMonths();
         updateYearDisplay();
+        addEventToCalendar();
     }//Change main calendar display -- Calls everything
-    private void updateToggleMonths(){
+
+    private void updateToggleMonths() {
         for (ToggleButton button : arrayMonthToggle) {
-            if (monthToInt(button.getText()) == yearMonthNow.getMonthValue()){
+            if (monthToInt(button.getText()) == yearMonthNow.getMonthValue()) {
                 button.setSelected(true);
             }
-            if(yearMonthNow.getYear() == yearMonthToday.getYear() &&
-               yearMonthToday.getMonthValue() == monthToInt(button.getText())){
-               button.setTextFill(designColor("highlight"));
-            }else{
+            if (yearMonthNow.getYear() == yearMonthToday.getYear() &&
+                    yearMonthToday.getMonthValue() == monthToInt(button.getText())) {
+                button.setTextFill(designColor("highlight"));
+            } else {
                 button.setTextFill(designColor("regular"));
             }
         }
     }//Changes which monthToggleButton is selected after changeMonthPlus()
-    private void updateYearDisplay(){
-        yearDisplay.setText(yearMonthNow.getYear()+"");
-        if(yearMonthNow.getYear() == yearMonthToday.getYear()){
+
+    private void updateYearDisplay() {
+        yearDisplay.setText(yearMonthNow.getYear() + "");
+        if (yearMonthNow.getYear() == yearMonthToday.getYear()) {
             yearDisplay.setFill(designColor("highlight"));
-        }else{
+        } else {
             yearDisplay.setFill(designColor("regular"));
         }
     } //Highlights and updates the Year display
-    private void populateCalendar(LocalDate localDate){
-        while(!localDate.getDayOfWeek().toString().equals("SUNDAY")){
+
+    private void populateCalendar(LocalDate localDate) {
+        while (!localDate.getDayOfWeek().toString().equals("SUNDAY")) {
             localDate = localDate.minusDays(1);
         }
-        for(customVBox vbox : calendarVBox){
-            if(!vbox.getChildren().isEmpty()){
+        for (dateBox vbox : calendarVBox) {
+            if (!vbox.getChildren().isEmpty()) {
                 vbox.getChildren().clear();
+                vbox.clear();
             }
-            Text text = new Text(localDate.getDayOfMonth()+" ");
+            Text text = new Text(localDate.getDayOfMonth() + " ");
             text.setFill(designColor("regular"));
-            if(localDateNow.equals(localDate)){
-                text.setText(text.getText()+"- Today");
+            if (localDateNow.equals(localDate)) {
+                text.setText(text.getText() + "- Today");
                 text.setFill(designColor("highlight"));
             }
             vbox.getChildren().add(text);
@@ -120,141 +170,322 @@ public class CalendarController implements Initializable{
             localDate = localDate.plusDays(1);
         }
     } //Add the day number (e.g. 10 - Today) && puts day number in
-    private void addEventToCalendar(){
-        for(customVBox vbox : calendarVBox){
+
+    //Add the events to the calendar
+    private void addEventToCalendar() {
+        ArrayList<String> longEventKeys = new ArrayList<>(1);
+        String eventLongHolder = "";
+
+        for (dateBox vbox : calendarVBox) {
+            ArrayList<StackPane> eventPanes = new ArrayList<>(1);
+            //Add long event first to look nice
+            for (String key : eventLong.keySet()) {
+                LocalDate[] rangeOfDates = toLocalDateRange(key);
+                if (isDuringRange(vbox.date, rangeOfDates[0], rangeOfDates[1])) {
+                    eventLongHolder = eventLong.get(key);
+                    vbox.addLongEventKeys(key);
+                    if (longEventKeys.contains(key)) {
+                        //Name was already added
+                        eventPanes.addAll(returnEventPanes(eventLongHolder, false));
+                    } else {
+                        //Name was not yet added
+                        longEventKeys.add(key);
+                        eventPanes.addAll(returnEventPanes(eventLongHolder, true));
+                    }
+                }
+            }
+
+            //Add one-day events
+            for (String key : eventShort.keySet()) {
+                if (vbox.date.isEqual(toLocalDate(key))) {
+                    eventPanes.addAll(returnEventPanes(eventShort.get(key), true));
+                }
+            }
+            for (StackPane stackPane : eventPanes) {
+                vbox.getChildren().add(stackPane);
+            }
+            eventPanes.clear();
+        }
+
+
+    }
+
+    private ArrayList<StackPane> returnEventPanes(String events, boolean nameIt) {
+        ArrayList<StackPane> returnPanes = new ArrayList<>(1);
+        String[] eventType = {"", "", ""};//Work, entertainment, personal
+        String[] eventsDivided = events.split(";");
+
+        for (int i = 0; i < eventsDivided.length; i++) {
+            String eventName = eventsDivided[i];
+            String eventShort = eventsDivided[i].substring(1);
+            if (eventName.startsWith("W")) {
+                eventType[0] += eventShort + ", ";
+            } else if (eventName.startsWith("E")) {
+                eventType[1] += eventShort + ", ";
+            } else {//Starts with "P"
+                eventType[2] += eventShort + ", ";
+            }
 
         }
-    }//Add the events to calendar and updates the VBOX to hold the events displayed
-    class customVBox extends VBox {
-        private HashMap<String, String> events = new HashMap<>();
+
+        for (int i = 0; i < 3; i++) {
+            if (!eventType[i].isEmpty()) {
+                Color color;
+
+                StackPane stackPane = new StackPane();
+                stackPane.setPrefSize(130, 20);
+                Rectangle rectangle = new Rectangle(130, 20);
+                rectangle.setFill(eventColor('z', i));
+
+                if (nameIt) { //Create a text pane for it
+                    Label label = new Label();
+                    label.setTextFill(eventColor('n', 5));
+                    label.setMaxWidth(130);
+                    label.setText(eventType[i].substring(0, eventType[i].length() - 1));
+                    stackPane.getChildren().setAll(rectangle, label);
+                } else {
+                    stackPane.getChildren().setAll(rectangle);
+                }
+                returnPanes.add(stackPane);
+            }
+        }
+
+        return returnPanes;
+    }
+
+    private void updateEventDateShow() {
+        String date1 = localDateEventShow.getMonthValue() + "/" + localDateEventShow.getDayOfMonth();
+        if (localDateEventShow2 == null) {
+            //Doing single dates
+            dateChosed.setText(date1);
+        } else {
+            dateChosed.setText(date1 + " - " + localDateEventShow2.getMonthValue() + "/" + localDateEventShow2.getDayOfMonth());
+        }
+    }
+
+    //Calendar boxes
+    class dateBox extends VBox {
         private LocalDate date;
+        private ArrayList<String> longEventKeys = new ArrayList<>(0);
 
-        customVBox(){
+        dateBox() {
             this.setOnMouseClicked(event -> {
-                if(!event.isShiftDown()) showingEventText.setText("Event Details: "+dateToText(date));
+                if (!event.isShiftDown()) {
+                    localDateEventShow = date;
+                    localDateEventShow2 = null;
+                    showingEventText.setText("Event Details: " + dateToText(date));
+                    eventDisplayHolder.getChildren().clear();
 
+                    if (!longEventKeys.isEmpty()) {
+                        for (String key : longEventKeys) {
+                            String[] eventList = eventLong.get(key).split(";");
+                            for (int i = 0; i < eventList.length; i++) {
+                                textLists text = new textLists();
+                                text.setLongDate(key);
+                                text.setIsLongEvent(true);
+                                text.setEvent(eventList[i]);
+                                text.setFill(eventColor(eventList[i].charAt(0), 100));
+                                eventDisplayHolder.getChildren().addAll(text);
+                            }
+                        }
+                    }
+                    String shortEvent = eventShort.get(date.getDayOfYear() + "," + date.getYear());
+                    if (shortEvent != null) {
+                        String[] eventArrays = shortEvent.split(";");
+                        for (int b = 0; b < eventArrays.length; b++) {
+                            textLists text = new textLists();
+                            text.setEvent(eventArrays[b]);
+                            text.setLocalDate(date);
+                            text.setIsLongEvent(false);
+                            text.setFill(eventColor(eventArrays[b].charAt(0), 100));
+                            eventDisplayHolder.getChildren().addAll(text);
+                        }
+                    }
+                } else if (date.isAfter(localDateEventShow)) {
+                    localDateEventShow2 = date;
+                }
+                updateEventDateShow();
+                updateDaysApart();
             });
         }
 
-        private String dateToText(LocalDate localDate){
-            return localDate.getMonthValue()+"/"+localDate.getDayOfMonth();
+        private String dateToText(LocalDate localDate) {
+            return localDate.getMonthValue() + "/" + localDate.getDayOfMonth();
         }
-        public void addEvent(String date, String event){
-            events.put(date, event);
-        }
-        public void addDate(LocalDate date){
+
+        public void addDate(LocalDate date) {
             this.date = date;
         }
-        public HashMap getEvent(){
-            return events;
-        }
-        public boolean isBetween(LocalDate dateAfter, LocalDate dateBefore){
-            return date.isBefore(dateBefore.minusDays(1)) && date.isAfter(dateAfter.plusDays(1));
+
+        public void addLongEventKeys(String key) {
+            this.longEventKeys.add(key);
         }
 
+        public void clear() {
+            longEventKeys.clear();
+        }
     }
 
-    class textExtends extends Text{
+    class textLists extends Text {
         private String event;
-        private String date;
-        private String extra;
+        private String longDate;
+        private LocalDate date;
+        private boolean isLongEvent = false;
 
-        public textExtends(){
-            this.setOnMouseClicked(e->{
-
+        public textLists() {
+            this.setOnMouseClicked(e -> {
+                this.setFill(eventColor(event.charAt(0), 100));
+                if (e.isShortcutDown()) {
+                    String original;
+                    if (isLongEvent) {
+                        original = eventLong.get(longDate);
+                        eventLong.put(longDate, original.replace(event, ""));
+                        if (eventLong.get(longDate).isEmpty()) {
+                            eventLong.remove(longDate);
+                        }
+                    } else {
+                        original = eventShort.get(toStringLocalDate(date));
+                        eventShort.put(toStringLocalDate(date), original.replace(event + ";", ""));
+                        if (eventShort.get(toStringLocalDate(date)).isEmpty()) {
+                            eventShort.remove(toStringLocalDate(date));
+                        }
+                    }
+                    writeData = true;
+                    updateView();
+                    eventDisplayHolder.getChildren().remove(this);
+                }
             });
         }
 
-        public void setEvent(String event){
+        public void setEvent(String event) {
             this.event = event;
-            this.setText(event);
+            this.setText(event.substring(1));
         }
-        public void setLocalDate(String date){
+
+        public void setLocalDate(LocalDate date) {
             this.date = date;
         }
-        public void setExtra(String extra){
-            this.extra = extra;
+
+        public void setIsLongEvent(boolean isLongEvent) {
+            this.isLongEvent = isLongEvent;
         }
-        public String getEvent(){
-            return event;
+
+        public void setLongDate(String date) {
+            this.longDate = date;
         }
     }
-    @FXML private void removeEvent(){
 
+    private void updateDaysApart(){
+        LocalDate today = LocalDate.now();
+        if(localDateEventShow2 == null){
+            //Today to clicked date
+            daysApart.setText(today.until(localDateEventShow, ChronoUnit.DAYS)+"");
+        }else{
+            daysApart.setText(localDateEventShow.until(localDateEventShow2, ChronoUnit.DAYS)+"");
+        }
     }
 
-
-    @FXML private void newEvent(KeyEvent keyEvent){
-        if(keyEvent.getCode() == KeyCode.ENTER){
-            if(inputEvent.getText().length() == 0){
+    @FXML
+    private void newEvent(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            if (inputEvent.getText().isEmpty()) {
                 return;
-            }else{
-                String type = "";
-                if(toggleButtonSchool.isSelected()){
-                    type = "S";
-                }else if(toggleButtonEntertainment.isSelected()){
-                    type = "E";
-                }else if(toggleButtonPersonal.isSelected()){
-                    type = "P";
+            } else {
+                char type = 'Z';
+                if (toggleButtonSchool.isSelected()) {
+                    type = 'W';
+                } else if (toggleButtonEntertainment.isSelected()) {
+                    type = 'E';
+                } else if (toggleButtonPersonal.isSelected()) {
+                    type = 'P';
                 }
                 addEvent(inputEvent.getText(), type);
             }
-        }else if(keyEvent.getCode() == KeyCode.ESCAPE){
+            inputEvent.setText("");
+            writeData = true;
+        } else if (keyEvent.getCode() == KeyCode.ESCAPE) {
             inputEvent.setText("");
         }
     }
-    private void addEvent(String event, String type){
 
+    private void addEvent(String event, char type) {
+        if (localDateEventShow2 != null) {
+            //This is an LongEvent type
+            String longDateKey = toStringLocalDate(localDateEventShow) + "," + toStringLocalDate(localDateEventShow2);
+            if (eventLong.get(longDateKey) != null) {
+                eventLong.put(longDateKey, eventLong.get(longDateKey) + type + event + ";");
+            } else {
+                eventLong.put(longDateKey, type + event + ";");
+            }
+        } else {
+            String shortDateKey = toStringLocalDate(localDateEventShow);
+            if (eventShort.get(shortDateKey) != null) {
+                eventShort.put(shortDateKey, eventShort.get(shortDateKey) + type + event + ";");
+            } else {
+                eventShort.put(shortDateKey, type + event + ";");
+            }
+        }
+
+        updateView();
     }
 
-    @FXML private void changeDate(Event event){
+    @FXML
+    private void changeDate() {
         LocalDate localDateToday = LocalDate.now();
         localDateEventShow = localDateToday;
         localDateEventShow2 = null;
         updateView();
     }
-
-
-    private Color eventColor(char eventType){
-        switch(eventType){
-            case 'W':
-                return new Color(0.0784, 0.5843, 0.8784, 1);
-            case 'E':
-                return new Color(0.3255, 0.8667, 0.4235, 1);
-            case 'P':
-                return new Color(1, 0.2431, 0.2549, 1);
-            default:
-                return new Color(0.8196, 0.8078, 0.8118, 1);
+    private Color eventColor(char eventType, int arraySpot) {
+        if (eventType == 'W' || arraySpot == 0) {
+            return DesignEnum.BLUE.getColor();
+        } else if (eventType == 'E' || arraySpot == 1) {
+            return DesignEnum.GREEN.getColor();
+        } else if (eventType == 'P' || arraySpot == 2) {
+            return DesignEnum.RED.getColor();
+        } else {
+            return DesignEnum.GREY.getColor();
         }
     }
-    private Color designColor(String designChoice){
-        switch(designChoice.toLowerCase()){
+
+    private Color designColor(String designChoice) {
+        switch (designChoice.toLowerCase()) {
             case "regular":
-                return new Color(0.8196, 0.8078, 0.8118, 1);
+                return DesignEnum.GREY.getColor();
             case "highlight":
-                return new Color(0.9765, 0.8824, 0.3255, 1);
+                return DesignEnum.YELLOW.getColor();
             default:
                 codeError("designColor");
-                return new Color(0.8196, 0, 0.0784, 1);
+                return DesignEnum.DARK_RED.getColor();
         }
     }
-    private LocalDate toLocalDate(String date){
+
+    private LocalDate toLocalDate(String date) {
         int[] dateParts = toIntArray(date.split(","));
-        return LocalDate.ofYearDay(dateParts[1],dateParts[0]);
+        return LocalDate.ofYearDay(dateParts[1], dateParts[0]);
     }
-    private String[] toStringLocalDate(LocalDate date){
-        String[] localDateString = {date.getDayOfYear()+"",date.getYear()+""};
+
+    private LocalDate[] toLocalDateRange(String dates) {
+        String[] dateArray = dates.split(",");
+        LocalDate[] localDates = {toLocalDate(dateArray[0] + "," + dateArray[1]), toLocalDate(dateArray[2] + "," + dateArray[3])};
+        return localDates;
+    }
+
+    private String toStringLocalDate(LocalDate date) {
+        String localDateString = date.getDayOfYear() + "," + date.getYear();
         return localDateString;
     }
-    private int[] toIntArray(String[] stringOfInt){
+
+    private int[] toIntArray(String[] stringOfInt) {
         int[] intArray = new int[stringOfInt.length];
         for (int i = 0; i < stringOfInt.length; i++) {
             intArray[i] = Integer.parseInt(stringOfInt[i]);
         }
         return intArray;
     }
-    private int monthToInt(String month){
-        switch (month){
+
+    private int monthToInt(String month) {
+        switch (month) {
             case "Jan":
                 return 1;
             case "Feb":
@@ -284,54 +515,66 @@ public class CalendarController implements Initializable{
                 return 12;
         }
     }
-    private boolean isDuringRange(LocalDate thisDate, LocalDate date1, LocalDate date2){
-        return ( thisDate.isAfter(date1.minusDays(1)) && thisDate.isBefore(date2.plusDays(1)) );
+
+    private boolean isDuringRange(LocalDate thisDate, LocalDate date1, LocalDate date2) {
+        return (thisDate.isAfter(date1.minusDays(1)) && thisDate.isBefore(date2.plusDays(1)));
     }
 
-    private void codeError(String objectName){
-        System.out.println("Error Choosing "+objectName+"()");
+    private void codeError(String objectName) {
+        System.out.println("Error Choosing " + objectName + "()");
     }
-    class SetUp{
-        private void startUp(){
-            addToToggleGroup(addEventToggleGroup, toggleButtonSchool, toggleButtonPersonal, toggleButtonPersonal);
+
+    class SetUp {
+        private void startUp() {
+            addToToggleGroup(addEventToggleGroup, toggleButtonSchool, toggleButtonEntertainment, toggleButtonPersonal);
             bottomDaysText();
             setMonthDisplay();
             setDaysHolder();
+            setDefaults();
         }//Basic design setUps
-        private void bottomDaysText(){
-            String bottomText = localDateNow.getDayOfWeek().toString().substring(0,1) + localDateNow.getDayOfWeek().toString().toLowerCase().substring(1, localDateNow.getDayOfWeek().toString().length());
-            bottomDayOfWeek.setText(bottomText);
-            bottomDay.setText(localDateNow.getDayOfMonth()+"");
-            bottomYear.setText(localDateNow.getYear()+"");
 
-            if(bottomDay.getText().endsWith("1")){
+        private void setDefaults() {
+            localDateEventShow = LocalDate.now();
+            dateChosed.setText(localDateEventShow.getMonthValue() + "/" + localDateEventShow.getDayOfMonth());
+        }
+
+        private void bottomDaysText() {
+            String bottomText = localDateNow.getDayOfWeek().toString().substring(0, 1) + localDateNow.getDayOfWeek().toString().toLowerCase().substring(1, localDateNow.getDayOfWeek().toString().length());
+            bottomDayOfWeek.setText(bottomText);
+            bottomDay.setText(localDateNow.getDayOfMonth() + "");
+            bottomYear.setText(localDateNow.getYear() + "");
+
+            if (bottomDay.getText().endsWith("1")) {
                 bottomSuffix.setText("st");
-            }else if(bottomDay.getText().endsWith("2")){
+            } else if (bottomDay.getText().endsWith("2")) {
                 bottomSuffix.setText("nd");
-            }else if(bottomDay.getText().endsWith("3")){
+            } else if (bottomDay.getText().endsWith("3")) {
                 bottomSuffix.setText("rd");
-            }else{
+            } else {
                 bottomSuffix.setText("th");
             }
         }//Sets bottom days text
-        private void addToToggleGroup(ToggleGroup toggleGroup, ToggleButton... toggleButtons){
+
+        private void addToToggleGroup(ToggleGroup toggleGroup, ToggleButton... toggleButtons) {
             for (ToggleButton toggleButton : toggleButtons) {
                 toggleButton.setToggleGroup(toggleGroup);
             }
         }//Adds toggleGroup to toggleButton
-        private void setMonthDisplay(){
+
+        private void setMonthDisplay() {
+
             monthHolder.getChildren().remove(monthIncrease);
             for (int i = 0; i < 12; i++) {
                 ToggleButton button = new ToggleButton();
                 button.setTextFill(designColor("regular"));
-                if(i+1 == yearMonthNow.getMonthValue()){
+                if (i + 1 == yearMonthNow.getMonthValue()) {
                     button.setSelected(true);
                     button.setTextFill(designColor("highlight"));
                 }
-                button.setText(monthList[i]);
+                button.setText(MONTHS[i]);
                 button.setMinSize(60, 30);
                 button.setAlignment(Pos.CENTER);
-                button.setOnAction(e->changeMonth(button));
+                button.setOnAction(e -> changeMonth(button));
                 button.setToggleGroup(monthToggleGroup);
                 monthHolder.getChildren().add(button);
                 button.getStyleClass().add("monthToggle");
@@ -339,10 +582,11 @@ public class CalendarController implements Initializable{
             }
             monthHolder.getChildren().add(monthIncrease);
         }//Adds month buttons
-        private void setDaysHolder(){
-            for(int i = 1; i < 7; i++){
+
+        private void setDaysHolder() {
+            for (int i = 1; i < 7; i++) {
                 for (int a = 0; a < 7; a++) {
-                    customVBox vBox = new customVBox();
+                    dateBox vBox = new dateBox();
                     vBox.setPrefSize(100, 90);
                     vBox.setPrefSize(130, 90);
                     daysHolder.add(vBox, a, i);
@@ -350,18 +594,10 @@ public class CalendarController implements Initializable{
                 }
             }
         }//Adds vBox to the gridPane
+
         private void changeMonth(ToggleButton button) {
             yearMonthNow = YearMonth.of(yearMonthNow.getYear(), monthToInt(button.getText()));
             updateView();
         }//Change month by setMonthDisplay()
     }
 }
-
-/**TODO
- * Read and write data
- * Add data
- * Take care of multiple adding and efficient reading
- * Deleted asd file
- */
-
-
