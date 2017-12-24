@@ -104,5 +104,5 @@ public final class WorkController implements Initializable {
                 stopwatchTime[1], stopwatchTime[2]));
     }
 
-    //TODO: Create a enum separate class for all to read
+    //TODO: ASDf
 }
