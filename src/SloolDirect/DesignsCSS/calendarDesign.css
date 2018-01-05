@@ -7,7 +7,7 @@
 .monthToggle:hover{
     -fx-background-color: #656565;
 }
-#dateChosed{
+#dateChose{
     -fx-background-color: transparent;
     -fx-text-fill: #34aac1;
     -fx-prompt-text-fill: #30C5FF;

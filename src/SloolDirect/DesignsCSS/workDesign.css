@@ -1,3 +1,103 @@
 #stopwatchButton{
     -fx-background-color: transparent;
 }
+#toDoDelete{
+    -fx-background-color: transparent;
+}
+#toDoInput{
+    -fx-background-color: transparent;
+    -fx-text-fill: #D1CECF;
+}
+#moveup{
+    -fx-background-color: transparent;
+    -fx-text-fill: #D1CECF;
+}
+
+//Todo selection
+
+.list-cell:filled:selected:focus, .list-cell:filled:selected{
+    -fx-text-fill: #9625FA;
+    -fx-background-color: transparent;
+}
+.list-cell:filled:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9625FA;
+}
+.list-view{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #C0C0C0 transparent;
+}
+.list-cell{
+    -fx-background-color: transparent;
+}
+.list-cell:filled{
+    -fx-background-color: transparent;
+    -fx-text-fill: #C0C0C0;
+}
+.list-view .scroll-bar:horizontal{
+    -fx-background-color: transparent;
+}
+.list-view .scroll-bar:vertical{
+    -fx-background-color: transparent;
+}
+.list-view .increment-button , .list-view .decrement-button{
+    -fx-opacity: 0;
+}
+.list-view .scroll-bar:horizontal .track , .list-view .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+}
+.list-view .scroll-bar:horizontal .thumb,.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+}
+.list-view .corner{
+    -fx-opacity: 0;
+}
+//To do end
+
+
+
+
+//Terminal Design
+.text-area{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #C0C0C0 transparent;
+    -fx-text-fill: #C0C0C0;
+}
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+.text-area .scroll-bar:horizontal{
+    -fx-background-color: transparent;
+}
+.text-area .scroll-bar:vertical{
+    -fx-background-color: transparent;
+}
+.text-area .increment-button, .text-area .decrement-button{
+    -fx-opacity: 0;
+}
+.text-area .scroll-bar:horizontal .track , .text-area .scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+}
+.text-area .scroll-bar:horizontal .thumb, .text-area .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+}
+.text-area .corner{
+    -fx-opacity: 0;
+}
+
+#terminalInput{
+    -fx-background-color: transparent;
+    -fx-text-fill: #D1CECF;
+}
+//Terminal end
+
+
+
+
+//Start
